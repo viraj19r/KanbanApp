@@ -7,3 +7,5 @@ class LocalDevelopmentConfig():
     SQLALCHEMY_DATABASE_URI = "sqlite:///" + os.path.join(sqlite_db_dir,"test.sqlite3")
     # SQLALCHEMY_TRACK_MODIFICATIONS = True
     DEBUG = True
+    SECRET_KEY = 'my-secret-key'
+    SECURITY_PASSWORD_SALT	= 'salt-key'
