@@ -9,3 +9,7 @@ class LocalDevelopmentConfig():
     DEBUG = True
     SECRET_KEY = 'my-secret-key'
     SECURITY_PASSWORD_SALT	= 'salt-key'
+    SECURITY_PASSWORD_HASH = 'bcrypt'
+    SECURITY_REGISTRABLE = True
+    SECURITY_SEND_REGISTER_EMAIL = False
+    SECURITY_UNAUTHORIZED_VIEW = None
