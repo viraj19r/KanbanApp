@@ -12,15 +12,13 @@ login_manager.session_protection = "strong"
 login_manager.login_view = "login"
 login_manager.login_message_category = "info"
 bcrypt = Bcrypt()
-
 app = None
-
 @login_manager.user_loader
 def load_user(user_id):
     return User.get(user_id)
 
 def create_app():
-    app = Flask(__name__, template_folder='../templates')
+    app = Flask(__name__, template_folder='../templates',static_folder='../static')
     app.config.from_object(LocalDevelopmentConfig)
     login_manager.init_app(app)
     db.init_app(app)
