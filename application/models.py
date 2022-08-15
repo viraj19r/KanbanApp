@@ -1,38 +1,69 @@
 from enum import unique
+from tkinter import CASCADE
 from flask_login import UserMixin
+from sqlalchemy import ForeignKey
 from application import login_manager
+from datetime import datetime
 from application.database import db
+
 
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
 
-class User(db.Model,UserMixin):
+
+class User(db.Model, UserMixin):
     __tablename__ = 'user'
-    id = db.Column(db.Integer(),primary_key=True)
-    fname = db.Column(db.String(),nullable=False)
-    lname = db.Column(db.String(),nullable=False)
-    email = db.Column(db.String(80),unique=True,nullable=False)
-    password = db.Column(db.String(255),nullable=False)
-    active = db.Column(db.Boolean())
-
-
-# class RolesUsers(db.Model):
-#     __tablename__ = 'roles_users'
-#     id = db.Column(db.Integer(), primary_key=True)
-#     user_id = db.Column(db.Integer(), db.ForeignKey('user.id'))
-#     role_id = db.Column(db.Integer(), db.ForeignKey('role.id'))
-
-
-
+    id = db.Column(db.Integer(), primary_key=True)
+    fname = db.Column(db.String(), nullable=False)
+    lname = db.Column(db.String(), nullable=False)
+    email = db.Column(db.String(80), unique=True, nullable=False)
+    password = db.Column(db.String(255), nullable=False)
+    lists = db.relationship('List', backref='user', lazy=True)
 
     def __repr__(self):
-        return f'{self.fname}{self.lname}'
-
-# class Role(db.Model, RoleMixin):
-#     __tablename__ = 'role'
-#     id = db.Column(db.Integer(), primary_key=True)
-#     name = db.Column(db.String(80), unique=True)
-#     description = db.Column(db.String(255))
+        return f'User- {self.fname} {self.lname}'
 
 
+class List(db.Model, UserMixin):
+    __tablename__ = 'list'
+    id = db.Column(db.Integer(), primary_key=True)
+    name = db.Column(db.String(), unique=True, nullable=False)
+    description = db.Column(db.String())
+    date_created = db.Column(db.DateTime(), nullable=False,default=datetime.now())
+    # foreign key
+    user_id = db.Column(db.Integer(), db.ForeignKey(
+        'user.id', ondelete='CASCADE'))
+    cards = db.relationship('Card', backref='list', lazy=True)
+
+    def __repr__(self):
+        return f'List-{self.name}'
+
+
+class Card(db.Model, UserMixin):
+    __tablename__ = 'card'
+    id = db.Column(db.Integer(), primary_key=True)
+    title = db.Column(db.String(), unique=True, nullable=False)
+    content = db.Column(db.String())
+    deadline = db.Column(db.DateTime(), nullable=False)
+    date_created = db.Column(db.DateTime(), nullable=False,default=datetime.now())
+    #default=datetime.now()
+    date_completed = db.Column(db.DateTime())
+    color = db.Column(db.String(), nullable=False)
+    completed_status = db.Column(db.Boolean(), nullable=False)
+    # foreign key
+    list_id = db.Column(db.Integer(), db.ForeignKey(
+        'list.id',ondelete='CASCADE'))
+
+    def __repr__(self):
+        return f'Card-{self.title}'
+
+
+class ColorPicker(db.Model, UserMixin):
+    __tablename__ = 'colorpicker'
+    id = db.Column(db.Integer(), primary_key=True)
+    color_name = db.Column(db.String(), nullable=False)
+    color_code = db.Column(db.String(), nullable=False)
+
+    def __repr__(self):
+        return f'{self.color_name}'
