@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+{% block header %}
+<a class="btn btn-outline-success btn-light mx-5" href="{{ url_for('login') }}" type="submit">Already a User? &nbsp;
+    Login here</a>
+{% endblock header %}
+
+{% block body %}
+
+<div class="mb-5 mx-5 mt-3">
+    <div class="d-flex justify-content-between">
+        <h1 class="h2 d-flex align-items-center" style="font-family: monospace, serif;">Welcome to this Kanban
+            Board!
+        </h1>
+    </div>
+    <div class="d-flex flex-row justify-content-between shadow-lg bg-dark my-5" style="border-radius: 30px; ">
+
+        <img src="{{url_for('static',filename='images/kanban-system.webp')}}" alt="Kanban System" class=" float-right"
+            width="50%" height="600rem" style="border-top-left-radius: 30px;border-bottom-left-radius:30px;">
+        <div class="d-flex justify-content-center  py-5 px-1 w-50" style="width: 50%;">
+            <form class="" method="POST" style="height: 40%; width:80%;">
+                {{ form.hidden_tag() }}
+                <div class="d-flex justify-content-center">
+                    <h2 style="color: white;">Create Account</h2>
+                </div>
+                <div class="form-group d-flex justify-content-between">
+                    <div class="w-45 my-2">
+                        <!-- <label for="fname" style="color: white;">First Name</label>
+                            <input type="text" class="form-control" id="fname" placeholder="First name"> -->
+                        {{ form.fname.label(style="color: white;",class="form-control-label") }}
+
+                        {% if form.fname.errors %}
+                        {{ form.fname(class="form-control is-invalid",placeholder="First name") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.fname.errors %}
+                            <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                        {% else %}
+                        {{ form.fname(class="form-control",placeholder="First name") }}
+                        {% endif %}
+
+                    </div>
+                    <div class="w-45 my-2">
+                        <!-- <label for="lname" style="color: white;">Last Name</label>
+                            <input type="text" class="form-control" id="lname" placeholder="Last name"> -->
+                        {{ form.lname.label(style="color: white;",class="form-control-label") }}
+                        {% if form.lname.errors %}
+                        {{ form.lname(class="form-control is-invalid",placeholder="Last name") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.lname.errors %}
+                            <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                        {% else %}
+                        {{ form.lname(class="form-control",placeholder="Last name") }}
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="form-group my-2">
+                    <!-- <label for="username" style="color: white;">Email address</label>
+                        <input type="email" class="form-control" id="username" aria-describedby="emailHelp"
+                            placeholder="Enter email"> -->
+                    {{ form.email.label(style="color: white;",class="form-control-label") }}
+                    {% if form.email.errors %}
+                    {{ form.email(class="form-control is-invalid",placeholder="Enter Email") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.email.errors %}
+                        <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    {{ form.email(class="form-control",placeholder="Enter Email") }}
+                    {% endif %}
+                    <small id="emailHelp" class="form-text mx-2" style="color: white; font-size:x-small">We'll never
+                        share your email with anyone
+                        else.</small>
+                </div>
+                <div class="form-group my-3">
+                    <!-- <label for="pass" style="color: white;">Password</label>
+                        <input type="password" class="form-control" id="pass" placeholder="Password"> -->
+                    {{ form.password.label(style="color: white;",class="form-control-label") }}
+                    {% if form.password.errors %}
+                    {{ form.password(class="form-control is-invalid",placeholder="Password") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.password.errors %}
+                        <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    {{ form.password(class="form-control",placeholder="Password") }}
+                    {% endif %}
+                </div>
+                <div class="form-group my-3">
+                    <!-- <label for="confpass" style="color: white;">Confirm Password</label>
+                        <input type="password" class="form-control" id="conpass" placeholder="Confirm Password"> -->
+                    {{ form.confirm_password.label(style="color: white;",class="form-control-label") }}
+                    {% if form.confirm_password.errors %}
+                    {{ form.confirm_password(class="form-control is-invalid",placeholder="Confirm Password") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.confirm_password.errors %}
+                        <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    {{ form.confirm_password(class="form-control",placeholder="Confirm Password") }}
+                    {% endif %}
+                </div>
+                <div class="d-flex justify-content-center mt-5">
+                    <!-- <button type="submit" class="btn btn-success d-flex justify-content-center" href="#" role="button"
+                            style="width: 30%;">Log In</button> -->
+                    {{ form.submit(class="btn btn-success d-flex justify-content-center",style="width: 30%;") }}
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+{% endblock body %}
