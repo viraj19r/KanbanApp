@@ -3,6 +3,7 @@ from tkinter import CASCADE
 from flask_login import UserMixin
 from sqlalchemy import ForeignKey
 from application import login_manager
+from datetime import datetime
 from application.database import db
 
 
@@ -29,11 +30,11 @@ class List(db.Model, UserMixin):
     id = db.Column(db.Integer(), primary_key=True)
     name = db.Column(db.String(), unique=True, nullable=False)
     description = db.Column(db.String())
-    date_created = db.Column(db.Datetime(), nullable=False)
-    lists = db.relationship('Card', backref='list', lazy=True)
+    date_created = db.Column(db.DateTime(), nullable=False,default=datetime.now())
     # foreign key
     user_id = db.Column(db.Integer(), db.ForeignKey(
-        'user.id'), ondelete='CASCADE')
+        'user.id', ondelete='CASCADE'))
+    cards = db.relationship('Card', backref='list', lazy=True)
 
     def __repr__(self):
         return f'List-{self.name}'
@@ -44,14 +45,15 @@ class Card(db.Model, UserMixin):
     id = db.Column(db.Integer(), primary_key=True)
     title = db.Column(db.String(), unique=True, nullable=False)
     content = db.Column(db.String())
-    deadline = db.Column(db.Datetime(), nullable=False)
-    date_created = db.Column(db.Datetime(), nullable=False)
-    date_completed = db.Column(db.Datetime())
+    deadline = db.Column(db.DateTime(), nullable=False)
+    date_created = db.Column(db.DateTime(), nullable=False,default=datetime.now())
+    #default=datetime.now()
+    date_completed = db.Column(db.DateTime())
     color = db.Column(db.String(), nullable=False)
     completed_status = db.Column(db.Boolean(), nullable=False)
     # foreign key
     list_id = db.Column(db.Integer(), db.ForeignKey(
-        'list.id'), ondelete='CASCADE')
+        'list.id',ondelete='CASCADE'))
 
     def __repr__(self):
         return f'Card-{self.title}'
