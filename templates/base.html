@@ -12,31 +12,35 @@
     <title>Kanban</title>
 </head>
 
-<body class="d-flex flex-column min-vh-100" style="background-color:#e8e8e8;">
-    <header>
-        <nav class="navbar navbar-expand-lg bg-black">
-            <div class="container-fluid">
-                <a class="navbar-brand border-" href="#">
-                    <img src="{{url_for('static',filename='images/Kanban.png')}}" alt="" width="120" height="80"
-                        class="d-inline-block align-text-top my-0 rounded border-white">
-                </a>
-                <div class="">
-                    {% block header %}
-                    {% endblock header %}
-                </div>
+<body class="d-flex flex-column min-vh-100 pb-3" style="background-color:#e8e8e8;"></body>
+<header>
+    <nav class="navbar navbar-expand-lg bg-black">
+        <div class="container-fluid">
+            <a class="navbar-brand border-" href="#">
+                <img src="{{url_for('static',filename='images/Kanban.png')}}" alt="" width="120" height="80"
+                    class="d-inline-block align-text-top my-0 rounded border-white">
+            </a>
+            <div class="">
+                {% block header %}
+                {% if current_user.is_authenticated %}
+                <a href="{{ url_for('logout') }}" class="btn btn-outline-danger btn-light mx-5" type="submit">Log
+                    Out</a>
+                {% endif %}
+                {% endblock header %}
             </div>
-            </div>
-        </nav>
-    </header>
-    {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-            {% for category,message in messages %}
-                <div class="alert alert-{{ category }}"> {{ message }}</div>
-            {% endfor %}
-        {% endif %}
-    {% endwith %}
-    {% block body %} {% endblock body %}
-    <!-- <div class="mb-5 mx-5 mt-3">
+        </div>
+        </div>
+    </nav>
+</header>
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+{% for category,message in messages %}
+<div class="alert alert-{{ category }}"> {{ message }}</div>
+{% endfor %}
+{% endif %}
+{% endwith %}
+{% block body %} {% endblock body %}
+<!-- <div class="mb-5 mx-5 mt-3">
         <div class="d-flex justify-content-between">
             <h1 class="h2 d-flex align-items-center" style="font-family: monospace, serif;">Welcome to this Kanban
                 Board!
@@ -86,17 +90,17 @@
 
         </div>
     </div> -->
-    <footer class="absolute-bottom bg-black text-center text-white py-5 mt-4 relative-bottom">
-        <section class="row align-items-start">
+<footer class="fixed-bottom bg-black text-center text-white py-5 mt-4">
+    <section class="row align-items-start">
 
-            <a href="" class="text-white text-decoration-none col">Contact me</a>
+        <a href="" class="text-white text-decoration-none col">Contact me</a>
 
-            <a href="" class="text-white text-decoration-none col ">Help me Improve</a>
+        <a href="" class="text-white text-decoration-none col ">Help me Improve</a>
 
-            <a href="" class="text-white text-decoration-none col">Connect with me on LinkedIn</a>
+        <a href="" class="text-white text-decoration-none col">Connect with me on LinkedIn</a>
 
-        </section>
-    </footer>
+    </section>
+</footer>
 </body>
 
 </html>

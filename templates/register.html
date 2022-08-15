@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block header %}
-<a class="btn btn-outline-success btn-light mx-5" href="{{ url_for('signin') }}" type="submit">Already a User? &nbsp;
+<a class="btn btn-outline-success btn-light mx-5" href="{{ url_for('login') }}" type="submit">Already a User? &nbsp;
     Login here</a>
 {% endblock header %}
 
@@ -12,11 +12,11 @@
             Board!
         </h1>
     </div>
-    <div class="d-flex flex-row justify-content-between shadow-lg bg-dark my-5" style="border-radius: 30px;">
+    <div class="d-flex flex-row justify-content-between shadow-lg bg-dark my-5" style="border-radius: 30px; ">
 
         <img src="{{url_for('static',filename='images/kanban-system.webp')}}" alt="Kanban System" class=" float-right"
-            width="50%" height="600" style="border-top-left-radius: 30px;border-bottom-left-radius:30px;">
-        <div class="d-flex justify-content-center  py-5 px-1 w-50">
+            width="50%" height="600rem" style="border-top-left-radius: 30px;border-bottom-left-radius:30px;">
+        <div class="d-flex justify-content-center  py-5 px-1 w-50" style="width: 50%;">
             <form class="" method="POST" style="height: 40%; width:80%;">
                 {{ form.hidden_tag() }}
                 <div class="d-flex justify-content-center">

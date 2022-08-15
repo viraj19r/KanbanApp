@@ -9,7 +9,8 @@ class LocalDevelopmentConfig():
     DEBUG = True
     SECRET_KEY = 'my-secret-key'
     SECURITY_PASSWORD_SALT	= 'salt-key'
-    SECURITY_PASSWORD_HASH = 'bcrypt'
+    SECURITY_PASSWORD_HASH = 'bcrypt' # check whehter this stores password direction after hashing or not
     SECURITY_REGISTRABLE = True
     SECURITY_SEND_REGISTER_EMAIL = False
     SECURITY_UNAUTHORIZED_VIEW = None
+    TESTING = True
