@@ -22,7 +22,7 @@ class User(db.Model, UserMixin):
     lists = db.relationship('List', backref='user', lazy=True)
 
     def __repr__(self):
-        return f'User- {self.fname} {self.lname}'
+        return f'User-{self.fname} {self.lname}'
 
 
 class List(db.Model, UserMixin):
@@ -47,9 +47,7 @@ class Card(db.Model, UserMixin):
     content = db.Column(db.String())
     deadline = db.Column(db.DateTime(), nullable=False)
     date_created = db.Column(db.DateTime(), nullable=False,default=datetime.now())
-    #default=datetime.now()
     date_completed = db.Column(db.DateTime())
-    color = db.Column(db.String(), nullable=False)
     completed_status = db.Column(db.Boolean(), nullable=False)
     # foreign key
     list_id = db.Column(db.Integer(), db.ForeignKey(
@@ -59,11 +57,11 @@ class Card(db.Model, UserMixin):
         return f'Card-{self.title}'
 
 
-class ColorPicker(db.Model, UserMixin):
-    __tablename__ = 'colorpicker'
-    id = db.Column(db.Integer(), primary_key=True)
-    color_name = db.Column(db.String(), nullable=False)
-    color_code = db.Column(db.String(), nullable=False)
+# class ColorPicker(db.Model, UserMixin):
+#     __tablename__ = 'colorpicker'
+#     id = db.Column(db.Integer(), primary_key=True)
+#     color_name = db.Column(db.String(), nullable=False)
+#     color_code = db.Column(db.String(), nullable=False)
 
-    def __repr__(self):
-        return f'{self.color_name}'
+#     def __repr__(self):
+#         return f'{self.color_name}'
