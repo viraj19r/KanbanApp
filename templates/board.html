@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+
+{% block header %}
+<a class="btn btn-outline-success btn-light mr-4" type="submit">Summary</a>
+<a href="{{ url_for('logout') }}" class="btn btn-outline-danger btn-light mx-5" type="submit">Log Out</a>
+{% endblock header %}
+
+{% block body %}
+<!-- For user with no lists -->
+{% if lists %}
+<div class="mb-2 mx-5 mt-3">
+    <div class="d-flex justify-content-between">
+
+        <h1 class="h2 d-flex align-items-center mx-5" style="font-family: monospace, serif;">Your Board:</h1>
+        <a href="{{ url_for('add_list') }}" class="btn btn-dark border rounded-pill p-4 mx-5 shadow-lg">Add
+            List <span>&#43;</span></a>
+    </div>
+</div>
+<!-- For user with min of 1 list in database -->
+{%else%}
+<div class="mb-2 mx-5 mt-3">
+    <div class="d-flex justify-content-center">
+
+        <h1 class="h2 d-flex align-items-center" style="font-family: monospace, serif;">Create Kanban Lists here : </h1>
+        <a href="{{ url_for('add_list') }}" class="btn btn-dark border rounded-pill p-4 mx-5 shadow-lg">Add
+            List <span>&#43;</span></a>
+    </div>
+</div>
+
+{% endif %}
+
+<div class="container-fluid">
+    <div class="d-flex flex-row justify-content-around">
+
+        {% for list in lists %}
+        <!-- list container  -->
+        <div class="card bg-dark m-2 shadow-lg" style="width:23%; height: 100%">
+            <h5 class="card-header"></h5>
+            <div class="card-body">
+                <div class="card-title">
+                    <div class="dropdown">
+                        <a class="btn btn-light dropdown-toggle w-100 mb-2" href="#" role="button" id="dropdownMenuLink"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            <!-- render list name -->
+                            {{ list.name }}
+                        </a>
+                        <ul class="dropdown-menu w-100" aria-labelledby="dropdownMenuLink">
+                            <li><a class="dropdown-item w-100 border-bottom" href="#" style="text-align:center ;">Edit
+                                    list</a></li>
+                            <li><a class="dropdown-item w-100 " href="#" style="text-align:center ;">Delete list</a>
+                            </li>
+                        </ul>
+                        <div class="d-flex flex-column">
+                            {% for card in list.cards %}
+                            <div class=" card my-3 mx-2 mb-3 li scroll" style="width:92%; min-height: 10rem">
+                                <div class="card-body">
+                                    <div class="card-title">
+                                        <div class="dropdown d-flex justify-content-around align-item-center">
+                                            {% if card.completed_status == True %}
+                                            <a class="btn bg-light dropdown-toggle mx-1" style="width: 85%;" href="#"
+                                                role="button" id="dropdownMenuLink" data-bs-toggle="dropdown"
+                                                aria-expanded="false">
+                                                {{ card.title }}
+                                            </a>
+                                            {% else %}
+                                            <a class="btn bg-light dropdown-toggle mx-1" style="width: 100%;" href="#"
+                                                role="button" id="dropdownMenuLink" data-bs-toggle="dropdown"
+                                                aria-expanded="false">
+                                                {{ card.title }}
+                                            </a>
+                                            {% endif %}
+                                            <ul class="dropdown-menu w-100" aria-labelledby="dropdownMenuLink">
+                                                <li><a class="dropdown-item w-100 border-bottom" href="#"
+                                                        style="text-align:center ;">Edit Card</a></li>
+                                                <li><a class="dropdown-item w-100 border-bottom" href="#"
+                                                        style="text-align:center ;">Delete Card</a></li>
+                                                {% if card.completed_status == True %}
+                                                <li><a class="dropdown-item w-100 " href="#"
+                                                        style="text-align:center ;">Mark as Uncompleted</a></li>
+                                                {% else %}
+                                                <li><a class="dropdown-item w-100 " href="#"
+                                                        style="text-align:center ;">Mark as Completed</a></li>
+                                                {% endif %}
+                                            </ul>
+
+                                            {% if card.completed_status == True %}
+                                            <div>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30"
+                                                    fill="currentColor" class="bi bi-check-circle-fill"
+                                                    viewBox="0 0 16 16">
+                                                    <path
+                                                        d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
+                                                </svg>
+                                            </div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <p class="card-text d-flex justify-content-center border rounded p-2"> {{
+                                        card.content
+                                        }}
+                                    </p>
+                                </div>
+                                <div class="p-1">
+                                    <small class="small card-text d-flex justify-content-end">Deadline: {{
+                                        card.deadline.strftime('%d-%m-%Y') }} </small>
+                                </div>
+                            </div>
+                            {% endfor %}
+                            <!-- add card button  -->
+                            <div class="d-flex justify-content-center">
+                                <a href="{{url_for('add_card')}}"
+                                    class="btn btn-light border rounded-pill px-4 py-3"><span>&#43;</span></a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock body %}
