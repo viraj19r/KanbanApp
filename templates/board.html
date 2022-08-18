@@ -45,9 +45,9 @@
                             {{ list.name }}
                         </a>
                         <ul class="dropdown-menu w-100" aria-labelledby="dropdownMenuLink">
-                            <li><a class="dropdown-item w-100 border-bottom" href="#" style="text-align:center ;">Edit
+                            <li><a class="dropdown-item w-100 border-bottom" href="edit_list/{{ list.id }}" style="text-align:center ;">Edit
                                     list</a></li>
-                            <li><a class="dropdown-item w-100 " href="#" style="text-align:center ;">Delete list</a>
+                            <li><a class="dropdown-item w-100 " href="delete_list/{{ list.id }}" style="text-align:center ;">Delete list</a>
                             </li>
                         </ul>
                         <div class="d-flex flex-column">
@@ -70,15 +70,12 @@
                                             </a>
                                             {% endif %}
                                             <ul class="dropdown-menu w-100" aria-labelledby="dropdownMenuLink">
-                                                <li><a class="dropdown-item w-100 border-bottom" href="#"
+                                                <li><a class="dropdown-item w-100 border-bottom" href="/edit_card/{{ card.id }}"
                                                         style="text-align:center ;">Edit Card</a></li>
-                                                <li><a class="dropdown-item w-100 border-bottom" href="#"
+                                                <li><a class="dropdown-item w-100 border-bottom" href="delete_card/{{ card.id }}"
                                                         style="text-align:center ;">Delete Card</a></li>
-                                                {% if card.completed_status == True %}
-                                                <li><a class="dropdown-item w-100 " href="#"
-                                                        style="text-align:center ;">Mark as Uncompleted</a></li>
-                                                {% else %}
-                                                <li><a class="dropdown-item w-100 " href="#"
+                                                {% if card.completed_status == False %}
+                                                <li><a class="dropdown-item w-100 " href="/mark_card_completed/{{ card.id }}"
                                                         style="text-align:center ;">Mark as Completed</a></li>
                                                 {% endif %}
                                             </ul>
