@@ -17,7 +17,14 @@ from datetime import datetime
 @login_required 
 def board():
     lists = List.query.all()
-    return render_template("board.html",lists=lists)
+    return render_template("board.html",user=current_user)
+
+@app.route("/summary")
+@login_required 
+def summary():
+    lists = List.query.all()
+    return render_template("summary.html",user=current_user)
+
 
 @app.route("/register", methods=["GET","POST"])
 def register():
@@ -94,7 +101,7 @@ def add_card():
             flash(f'Card {form.title.data} has been created successfully','success')
             return redirect(url_for('board'))
         else:
-            flash(f'Card named "{form.list_name.data}" already exist, Please try again with different name','success')
+            flash(f'Card named "{form.title.data}" already exist, Please try again with different name','success')
     return render_template("add_card.html",form=form)
 
 @app.route("/edit_list/<int:list_id>", methods=["GET","POST"])
@@ -117,7 +124,6 @@ def edit_list(list_id):
             flash(f'List named {form.list_name.data} already exist, Please try again with different name','success')
     return render_template("edit_list.html",form=form)
 
-
 @app.route("/edit_card/<int:card_id>", methods=["GET","POST"])
 @login_required
 def edit_card(card_id):
@@ -136,7 +142,8 @@ def edit_card(card_id):
         if complete_status == 'Completed':
             status = True
         #check if that cardname exist in that particular list 
-        checkdbcard = Card.query.filter_by(title=form.title.data).first()
+        checkdbcard = Card.query.filter_by(title=form.title.data)
+        checkdbcard = [c for c in checkdbcard if c!=card]
         if not checkdbcard:
             card.title = form.title.data
             card.content = form.content.data
@@ -147,7 +154,7 @@ def edit_card(card_id):
             flash(f'Card updated successfully','success')
             return redirect(url_for('board'))
         else:
-            flash(f'Card named "{form.list_name.data}" already exist, Please try again with different name','success')
+            flash(f'Card named "{form.title.data}" already exist, Please try again with different name','success')
     return render_template("edit_card.html",form=form)
 
 @app.route("/delete_list/<int:list_id>", methods=["GET","POST"])

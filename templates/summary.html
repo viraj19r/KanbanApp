@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block header %}
+<!-- <a class="btn btn-outline-success btn-light mr-4" type="submit">Summary</a> -->
+<a href="{{ url_for('logout') }}" class="btn btn-outline-danger btn-light mx-5" type="submit">Log Out</a>
+{% endblock header %}
+
+{% block body %}
+<!-- For user with no lists -->
+{% if user.lists %}
+<div class="mb-2 mx-5 mt-3">
+    <div class="d-flex justify-content-between">
+
+        <h1 class="h2 d-flex align-items-center mx-5" style="font-family: monospace, serif;">Summary of Individual Lists :</h1>
+    </div>
+</div>
+<!-- For user with min of 1 list in database -->
+{%else%}
+<div class="my-3 mx-5">
+    <div class="d-flex justify-content-start">
+        <h1 class="h2 d-flex align-items-center" style="font-family: monospace, serif;">
+            You don't have any lists to show summary - Start with creating list from your board
+        </h1>
+    </div>
+</div>
+
+{% endif %}
+
+<div class="mt-3 container-fluid">
+    <div class="d-flex flex-row justify-content-around">
+
+        {% for list in user.lists %}
+        <!-- list container  -->
+        <div class="card bg-dark m-2 shadow-lg" style="width:23%; min-height: 40rem">
+            <h5 class="card-header"></h5>
+            <div class="card-body">
+                <div class="card-title">
+                    <div class="dropdown">
+                        <a class="btn btn-light w-100 mb-2"data-bs-toggle="dropdown" aria-expanded="false">
+                            <!-- render list name -->
+                            {{ list.name }}
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock body %}

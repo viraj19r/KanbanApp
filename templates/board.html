@@ -1,23 +1,23 @@
 {% extends "base.html" %}
 
 {% block header %}
-<a class="btn btn-outline-success btn-light mr-4" type="submit">Summary</a>
+<a href="{{ url_for('summary') }}" class="btn btn-outline-success btn-light mr-4" type="submit">Summary</a>
 <a href="{{ url_for('logout') }}" class="btn btn-outline-danger btn-light mx-5" type="submit">Log Out</a>
 {% endblock header %}
 
 {% block body %}
 <!-- For user with no lists -->
-{% if lists %}
+{% if user.lists %}
 <div class="mb-2 mx-5 mt-3">
     <div class="d-flex justify-content-between">
-
+        
         <h1 class="h2 d-flex align-items-center mx-5" style="font-family: monospace, serif;">Your Board:</h1>
         <a href="{{ url_for('add_list') }}" class="btn btn-dark border rounded-pill p-4 mx-5 shadow-lg">Add
             List <span>&#43;</span></a>
+        </div>
     </div>
-</div>
-<!-- For user with min of 1 list in database -->
-{%else%}
+    <!-- For user with min of 1 list in database -->
+    {%else%}
 <div class="mb-2 mx-5 mt-3">
     <div class="d-flex justify-content-center">
 
@@ -32,7 +32,7 @@
 <div class="container-fluid">
     <div class="d-flex flex-row justify-content-around">
 
-        {% for list in lists %}
+        {% for list in user.lists %}
         <!-- list container  -->
         <div class="card bg-dark m-2 shadow-lg" style="width:23%; height: 100%">
             <h5 class="card-header"></h5>
@@ -45,9 +45,12 @@
                             {{ list.name }}
                         </a>
                         <ul class="dropdown-menu w-100" aria-labelledby="dropdownMenuLink">
-                            <li><a class="dropdown-item w-100 border-bottom" href="edit_list/{{ list.id }}" style="text-align:center ;">Edit
+                            <li><a class="dropdown-item w-100 border-bottom" href="edit_list/{{ list.id }}"
+                                    style="text-align:center ;">Edit
                                     list</a></li>
-                            <li><a class="dropdown-item w-100 " href="delete_list/{{ list.id }}" style="text-align:center ;">Delete list</a>
+                            <li><a onclick="return confirm('Are you sure you want to Delete?');"
+                                    class="dropdown-item w-100 " href="delete_list/{{ list.id }}"
+                                    style="text-align:center ;">Delete list</a>
                             </li>
                         </ul>
                         <div class="d-flex flex-column">
@@ -70,12 +73,17 @@
                                             </a>
                                             {% endif %}
                                             <ul class="dropdown-menu w-100" aria-labelledby="dropdownMenuLink">
-                                                <li><a class="dropdown-item w-100 border-bottom" href="/edit_card/{{ card.id }}"
-                                                        style="text-align:center ;">Edit Card</a></li>
-                                                <li><a class="dropdown-item w-100 border-bottom" href="delete_card/{{ card.id }}"
+                                                <li><a class="dropdown-item w-100 border-bottom"
+                                                        href="/edit_card/{{ card.id }}" style="text-align:center ;">Edit
+                                                        Card</a></li>
+                                                <li><a onclick="return confirm('Are you sure you want to Delete?');"
+                                                        class="dropdown-item w-100 border-bottom"
+                                                        href="delete_card/{{ card.id }}"
                                                         style="text-align:center ;">Delete Card</a></li>
                                                 {% if card.completed_status == False %}
-                                                <li><a class="dropdown-item w-100 " href="/mark_card_completed/{{ card.id }}"
+                                                <li><a onclick="return confirm('Are you sure you want to Mark it as Complete?');"
+                                                        class="dropdown-item w-100 "
+                                                        href="/mark_card_completed/{{ card.id }}"
                                                         style="text-align:center ;">Mark as Completed</a></li>
                                                 {% endif %}
                                             </ul>

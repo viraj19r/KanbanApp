@@ -3,7 +3,7 @@
 
 {% block header %}
 
-<a class="btn btn-outline-success btn-light mr-4" type="submit">Summary</a>
+<a href="{{ url_for('summary') }}" class="btn btn-outline-success btn-light mr-4" type="submit">Summary</a>
 <a href="{{ url_for('logout') }}" class="btn btn-outline-danger btn-light mx-5" type="submit">Log Out</a>
 {% endblock header %}
 
