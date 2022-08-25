@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+
+
+{% block header %}
+
+<a href="{{ url_for('summary') }}" class="btn btn-outline-success btn-light mr-4" type="submit">Summary</a>
+<a href="{{ url_for('logout') }}" class="btn btn-outline-danger btn-light mx-5" type="submit">Log Out</a>
+{% endblock header %}
+
+{% block body %}
+<div class="container">
+    <div class="mb-5 mx-5 mt-3">
+        <div class="d-flex justify-content-between">
+            <h1 class="h2 d-flex align-items-center" style="font-family: monospace, serif;">
+            </h1>
+        </div>
+    </div>
+    <div class="container d-flex justify-content-center">
+        <div class="d-flex justify-content-center bg-dark py-5 px-1 w-75 shadow-lg " style="border-radius: 50px;">
+            <form method="POST" style="height: 30%; width:60%;">
+                {{ form.csrf_token }}
+                <div class="d-flex justify-content-center">
+                    <h2 style="color: white;">Edit Card</h2>
+                </div>
+                <div class="mb-3">
+                    {{ form.title.label(class="form-label",style="color: white;") }}
+                    {% if form.title.errors %}
+                    {{ form.title(class="form-control is-invalid",placeholder="card-1") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.title.errors %}
+                        <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    {{ form.title(class="form-control",placeholder="card...") }}
+                    {% endif %}
+                </div>
+                <div class="mb-5">
+                    {{ form.content.label(class="form-label",style="color: white;") }}
+                    {% if form.content.errors %}
+                    {{ form.content(class="form-control is-invalid",placeholder="Description",rows="3") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.content.errors %}
+                        <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    {{ form.content(class="form-control",placeholder="Description",rows="3") }}
+
+                    {% endif %}
+                    
+                </div>
+                <div class="my-5 mx-2 d-flex flex-row justify-content-between align-items-center">
+                    {{ form.choose_list.label(class="form-label",style="color: white;") }}
+                    {% if form.choose_list.errors %}
+                    {{ form.choose_list(class="border rounded px-5 py-2 mx-3 is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.choose_list.errors %}
+                        <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    {{ form.choose_list(class="border rounded px-5 py-2 mx-3") }}
+                    {% endif %}
+
+                    {{ form.complete_status.label(class="form-label",style="color: white;") }}
+                    {% if form.complete_status.errors %}
+                    {{ form.complete_status(class="border rounded px-4 py-2 mx-3 is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.complete_status.errors %}
+                        <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    {{ form.complete_status(class="border rounded px-4 py-2 mx-3") }}
+                    {% endif %}
+                </div>
+                <div class="mb-5 mx-2 d-flex flex-row justify-content-start align-items-center">
+                    {{ form.deadline.label(class="form-label",style="color: white; margin-right:5rem;") }}
+                    {% if form.deadline.errors %}
+                    {{ form.deadline(class="mx-1 border rounded py-2 px-5 is-invalid",value="2022-02-19") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.deadline.errors %}
+                        <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    {{ form.deadline(class="mx-1 border rounded py-2 px-5") }}
+
+                    {% endif %}
+                </div>
+                <div class="d-flex justify-content-center mt-5">
+                    {{ form.submit(class="btn btn-primary d-flex justify-content-center",style="width: 30%;") }}
+                </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    {{date}}
+</div>
+{% endblock body %}

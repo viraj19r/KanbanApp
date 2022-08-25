@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+
+{% block header %}
+
+<a href="{{ url_for('summary') }}" class="btn btn-outline-success btn-light mr-4" type="submit">Summary</a>
+<a href="{{ url_for('logout') }}" class="btn btn-outline-danger btn-light mx-5" type="submit">Log Out</a>
+{% endblock header %}
+
+{% block body %}
+<div class="container">
+    <div class="mb-5 mx-5 mt-3">
+        <div class="d-flex justify-content-between">
+            <h1 class="h2 d-flex align-items-center" style="font-family: monospace, serif;">Add a list to your board
+                :
+            </h1>
+        </div>
+    </div>
+    <div class="d-flex justify-content-center">
+        <div class="d-flex justify-content-center bg-dark rounded-pill py-5 px-1 w-75 shadow-lg ">
+            <form method="POST" action="" style="height: 30%; width:60%;">
+                {{ form.csrf_token }}
+                <div class="d-flex justify-content-center">
+                    <h2 style="color: white;">Update List</h2>
+                </div>
+                <div class="mb-3">
+                    {{ form.list_name.label(class="form-label",style="color: white;") }}
+                    {% if form.list_name.errors %}
+                    {{ form.list_name(class="form-control is-invalid",placeholder="list-A") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.list_name.errors %}
+                        <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    {{ form.list_name(class="form-control",placeholder="list-A") }}  
+                    {% endif %}
+                </div>
+                <div class="mb-3">
+                    {{ form.description.label(class="form-label",style="color: white;") }}
+                    {% if form.description.errors %}
+                    {{ form.description(class="form-control is-invalid",placeholder="Description") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.description.errors %}
+                        <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    {{ form.description(class="form-control",placeholder="Description",rows="3") }}  
+                    {% endif %}
+                </div>
+                <div class="d-flex justify-content-center mt-3">
+                    {{ form.submit(class="btn btn-primary d-flex justify-content-center") }}
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock body %}

@@ -1,8 +1,13 @@
 from ast import Pass
+from sqlite3 import Date
 from xml.dom import ValidationErr
+from xmlrpc.client import Boolean
 from flask_wtf import FlaskForm
-from wtforms import StringField,PasswordField,SubmitField
+from sqlalchemy import false
+from application import app
+from wtforms import StringField,PasswordField,SubmitField,SelectField,TextAreaField,DateField,RadioField
 from wtforms.validators import DataRequired,Length,Email,EqualTo,ValidationError
+from wtforms.widgets.html5 import DateInput
 from application.models import User
 
 
@@ -25,6 +30,20 @@ class LoginForm(FlaskForm):
     email = StringField('Email',validators=[DataRequired(),Email()])
     password = PasswordField('Password',validators=[DataRequired()])
     submit = SubmitField('Log In')
+
+class CreateList(FlaskForm):
+    list_name = StringField('List Name',validators=[DataRequired()])
+    description = TextAreaField('Description',validators=[DataRequired()])
+    submit = SubmitField('Save')
+    
+
+class CreateCard(FlaskForm):
+    title = StringField('Title',validators=[DataRequired()])
+    content = TextAreaField('Content',validators=[DataRequired()])
+    deadline = DateField('Deadline  :',validators=[DataRequired()],widget=DateInput())
+    choose_list = SelectField('Lists  :',choices=[],coerce=int)
+    complete_status = SelectField('Status  :',choices=[('Uncompleted','Uncompleted'),('Completed','Completed')])
+    submit = SubmitField('Save')
 
 
 
