@@ -106,8 +106,16 @@
                                     </p>
                                 </div>
                                 <div class="p-1">
+                                    {% if card.deadline.date() < datenow %}
+                                    <small class="small card-text d-flex justify-content-end" >Deadline: <span style="color:red;">{{
+                                        card.deadline.strftime('%d-%m-%Y') }} </span> </small>
+                                    {% else %}
                                     <small class="small card-text d-flex justify-content-end">Deadline: {{
                                         card.deadline.strftime('%d-%m-%Y') }} </small>
+
+                                    {% endif %}
+
+
                                 </div>
                             </div>
                             {% endfor %}

@@ -42,7 +42,7 @@ class CreateCard(FlaskForm):
     content = TextAreaField('Content',validators=[DataRequired()])
     deadline = DateField('Deadline  :',validators=[DataRequired()],widget=DateInput())
     choose_list = SelectField('Lists  :',choices=[],coerce=int)
-    complete_status = SelectField('Status  :',choices=[('Completed','Completed'),('Uncompleted','Uncompleted')])
+    complete_status = SelectField('Status  :',choices=[('Uncompleted','Uncompleted'),('Completed','Completed')])
     submit = SubmitField('Save')
 
 

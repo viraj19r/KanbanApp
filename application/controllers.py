@@ -8,7 +8,10 @@ from application.forms import RegistrationForm,LoginForm,CreateList,CreateCard
 from application.models import User,List,Card
 from flask_login import login_user,logout_user,login_required,current_user
 from datetime import datetime
-
+import matplotlib
+matplotlib.use('Agg')
+from matplotlib import pyplot as plt
+from matplotlib import dates as dt
 # @app.before_first_request
 # def init_app():
 #     logout_user()
@@ -17,13 +20,95 @@ from datetime import datetime
 @login_required 
 def board():
     lists = List.query.all()
-    return render_template("board.html",user=current_user)
+    datenow = datetime.now().date()
+    return render_template("board.html",user=current_user,datenow=datenow)
+
+def plot_graph(dates,count):
+    plt.style.use('seaborn')
+    plt.plot_date(dates,count,linestyle='solid')
+    plt.gcf().autofmt_xdate()
+    date_format = dt.DateFormatter('%b, %d %Y')
+    plt.gca().xaxis.set_major_formatter(date_format)
+    plt.title('Daily Tasks Completed Count')
+    plt.tight_layout()
+    plt.savefig('/Users/viraj/Github/KanbanApp/static/images/summary_plot.png')
+
+def plot_piechart_completed(slices,labels):
+    colors = ['#6E6B6B','#4C628A'] # use hex values
+    plt.pie(slices,labels=labels,colors=colors,autopct=lambda p: '{:.0f}%'.format(p))  
+    plt.title('Completed Cards Summary')
+    plt.legend(loc='best')
+    plt.tight_layout()
+    plt.savefig('/Users/viraj/Github/KanbanApp/static/images/summary_completed.png')
+    
+def plot_piechart_completed_uncompleted(slices,labels):
+    colors = ['#6E6B6B','#4C628A','#684080'] # use hex values
+    plt.pie(slices,labels=labels,colors=colors,autopct=lambda p: '{:.0f}%'.format(p))
+    plt.title('Completed vs Uncompleted Cards Summary')
+    plt.legend(loc='best')
+    plt.tight_layout()
+    plt.savefig('/Users/viraj/Github/KanbanApp/static/images/summary_completed_uncompleted.png')
+    
+
 
 @app.route("/summary")
 @login_required 
 def summary():
-    lists = List.query.all()
+    user = current_user
+    lists = user.lists
+    date_completed = []
+    total_count = 0
+    completed_count = 0
+    completed_after_deadline_count = 0
+    completed_before_deadline_count = 0
+    uncompleted_deadline_cross_count = 0
+    uncompleted_deadline_not_cross_count = 0
+    for list in lists:
+        for card in list.cards:
+            if card.completed_status:
+                completed_count += 1
+                date = card.date_completed.date()
+                date_completed.append(date)
+                if date > card.deadline.date():
+                    completed_after_deadline_count += 1
+                else:
+                    completed_before_deadline_count += 1
+            if card.deadline.date() < datetime.now().date() and not card.completed_status :
+                uncompleted_deadline_cross_count += 1
+            total_count += 1
+    date_completed.sort()
+    uncompleted_count = total_count - completed_count
+    uncompleted_deadline_not_cross_count = uncompleted_count - uncompleted_deadline_cross_count
+    dates = []
+    count = []
+    for date in date_completed:
+        if date in dates:
+            i = dates.index(date)
+            count[i] += 1
+        else:
+            dates.append(date)
+            count.append(1)
+    # Plot graph Date completed count - save image
+    
+    plt.figure(0)
+    plt.clf()
+    plot_graph(dates,count)
+
+    plt.figure(1)
+    plt.clf()
+    # Pie chart for completed/uncompleted count - save image
+    slices1 = [completed_count,uncompleted_deadline_cross_count,uncompleted_deadline_not_cross_count]
+    lables1 = ['Completed Tasks','Uncompleted Tasks that crossed deadline','Uncompleted Tasks with deadline pending']
+    plot_piechart_completed_uncompleted(slices1,lables1)
+    plt.figure(2)
+    plt.clf()
+    # Pie chart for completed count - save image
+    slices2 = [completed_before_deadline_count,completed_after_deadline_count]
+    lables2 = ['Cards completed before deadline','Cards completed after deadline']
+    plot_piechart_completed(slices2,lables2)
     return render_template("summary.html",user=current_user)
+
+
 
 
 @app.route("/register", methods=["GET","POST"])
@@ -91,9 +176,11 @@ def add_card():
         #check if that cardname exist in that particular list 
         status = False
         complete_status = form.complete_status.data
+        date_completed = None
         if complete_status == 'Completed':
             status = True
-        card = Card(title=form.title.data,content=form.content.data,deadline=form.deadline.data,completed_status=status,list_id=form.choose_list.data)
+            date_completed = datetime.now()
+        card = Card(title=form.title.data,content=form.content.data,deadline=form.deadline.data,date_completed=date_completed,completed_status=status,list_id=form.choose_list.data)
         checkdbcard = Card.query.filter_by(title=form.title.data).first()
         if not checkdbcard:
             db.session.add(card)
