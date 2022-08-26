@@ -4,7 +4,7 @@ from turtle import title
 from application import app,db,bcrypt
 from flask import render_template, url_for
 from flask import request,flash, redirect
-from application.forms import RegistrationForm,LoginForm,CreateList,CreateCard
+from application.forms import RegistrationForm,LoginForm,CreateList,CreateCard,MoveCardDeleteList
 from application.models import User,List,Card
 from flask_login import login_user,logout_user,login_required,current_user
 from datetime import datetime
@@ -16,7 +16,7 @@ from matplotlib import dates as dt
 # def init_app():
 #     logout_user()
 
-@app.route("/board")
+@app.route("/")
 @login_required 
 def board():
     lists = List.query.all()
@@ -257,6 +257,30 @@ def delete_list(list_id):
     flash(f'List named {list_name} deleted successfully','success')
     return redirect(url_for('board'))
 
+@app.route("/delete_list_move_cards/<int:list_id>", methods=["GET","POST"])
+@login_required 
+def delete_list_move_cards(list_id):
+    form = MoveCardDeleteList()
+    lists = List.query.filter_by(user_id=current_user.id).all()
+    form.choose_list.choices = [(list.id,list.name) for list in lists if list.id != list_id]
+    list = List.query.filter_by(id=list_id).first()
+    cards = list.cards
+    if form.validate_on_submit():
+        move_list_id = int(form.choose_list.data)
+        print(move_list_id)
+        for card in cards:
+            move_list_id = int(form.choose_list.data)
+            newcard = Card(title=card.title,content=card.content,deadline=card.deadline,date_completed=card.date_completed,completed_status=card.completed_status,list_id=move_list_id)
+            db.session.delete(card)
+            db.session.commit()
+            db.session.add(newcard)
+        db.session.delete(list)
+        db.session.commit()
+        flash(f'Cards moved and List deleted successfully','success')
+        return redirect(url_for('board'))
+        
+
+    return render_template('move_cards.html',form=form,user=current_user)
 
 @app.route("/delete_card/<int:card_id>", methods=["GET","POST"])
 @login_required

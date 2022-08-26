@@ -45,7 +45,9 @@ class CreateCard(FlaskForm):
     complete_status = SelectField('Status  :',choices=[('Uncompleted','Uncompleted'),('Completed','Completed')])
     submit = SubmitField('Save')
 
-
+class MoveCardDeleteList(FlaskForm):
+    choose_list = SelectField('Move cards to this list  :',choices=[],coerce=int)
+    submit = SubmitField('Delete the List')
 
 
 

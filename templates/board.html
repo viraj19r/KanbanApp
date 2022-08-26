@@ -10,14 +10,14 @@
 {% if user.lists %}
 <div class="mb-2 mx-5 mt-3">
     <div class="d-flex justify-content-between">
-        
+
         <h1 class="h2 d-flex align-items-center mx-5" style="font-family: monospace, serif;">Your Board:</h1>
         <a href="{{ url_for('add_list') }}" class="btn btn-dark border rounded-pill p-4 mx-5 shadow-lg">Add
             List <span>&#43;</span></a>
-        </div>
     </div>
-    <!-- For user with min of 1 list in database -->
-    {%else%}
+</div>
+<!-- For user with min of 1 list in database -->
+{%else%}
 <div class="mb-2 mx-5 mt-3">
     <div class="d-flex justify-content-center">
 
@@ -51,6 +51,9 @@
                             <li><a onclick="return confirm('Are you sure you want to Delete?');"
                                     class="dropdown-item w-100 " href="delete_list/{{ list.id }}"
                                     style="text-align:center ;">Delete list</a>
+                            </li>
+                            <li><a class="dropdown-item w-100 " href="delete_list_move_cards/{{ list.id }}"
+                                    style="text-align:center ;">Move Cards and Delete list</a>
                             </li>
                         </ul>
                         <div class="d-flex flex-column">
@@ -106,14 +109,15 @@
                                     </p>
                                 </div>
                                 <div class="p-1">
-                                    {% if card.deadline.date() < datenow %}
-                                    <small class="small card-text d-flex justify-content-end" >Deadline: <span style="color:red;">{{
-                                        card.deadline.strftime('%d-%m-%Y') }} </span> </small>
-                                    {% else %}
-                                    <small class="small card-text d-flex justify-content-end">Deadline: {{
-                                        card.deadline.strftime('%d-%m-%Y') }} </small>
+                                    {% if card.deadline.date() < datenow %} <small
+                                        class="small card-text d-flex justify-content-end">Deadline: <span
+                                            style="color:red;">{{
+                                            card.deadline.strftime('%d-%m-%Y') }} </span> </small>
+                                        {% else %}
+                                        <small class="small card-text d-flex justify-content-end">Deadline: {{
+                                            card.deadline.strftime('%d-%m-%Y') }} </small>
 
-                                    {% endif %}
+                                        {% endif %}
 
 
                                 </div>

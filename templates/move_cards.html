@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+
+{% block header %}
+
+<a href="{{ url_for('summary') }}" class="btn btn-outline-success btn-light mr-4" type="submit">Summary</a>
+<a href="{{ url_for('logout') }}" class="btn btn-outline-danger btn-light mx-5" type="submit">Log Out</a>
+{% endblock header %}
+
+{% block body %}
+<div class="container">
+    <div class="mb-5 mx-5 mt-3">
+        <div class="d-flex justify-content-between">
+            <h1 class="h2 d-flex align-items-center" style="font-family: monospace, serif;">
+            </h1>
+        </div>
+    </div>
+    <div class="container d-flex justify-content-center">
+        {% if user.lists %}
+        <div class="d-flex justify-content-around bg-dark py-5 px-1 w-50 shadow-lg " style="border-radius: 50px;">
+            <form method="POST" style="height: 30%; width:70%;">
+                {{ form.csrf_token }}
+                <div class="border rounded pills d-flex justify-content-center p-3">
+                    <h2 style="color: white;">Move Cards to other list and Delete the List Permanently</h2>
+                </div>    
+                <div class="my-5 mx-2 d-flex flex-row justify-content-between align-items-center">
+                    {{ form.choose_list.label(class="form-label",style="color: white;") }}
+                    {% if form.choose_list.errors %}
+                    {{ form.choose_list(class="border rounded px-5 py-2 mx-3 is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.choose_list.errors %}
+                        <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    {{ form.choose_list(class="border rounded px-5 py-2 mx-3") }}
+                    {% endif %}
+                </div>
+
+                <div class="d-flex justify-content-center mt-5">
+                    {{ form.submit(class="btn btn-danger d-flex justify-content-center",style="width: 40%;") }}
+                </div>
+                </div>
+            </form>
+        </div>
+        {% else %}
+        You don't have any list - Try deleting the whole list with cards
+        <a href="{{ url_for('board') }}" class="btn btn-light mx-5" type="submit">Go to Board</a>
+        {% endif %}
+    </div>
+    {{date}}
+</div>
+{% endblock body %}
