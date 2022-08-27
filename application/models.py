@@ -56,12 +56,4 @@ class Card(db.Model, UserMixin):
     def __repr__(self):
         return f'Card-{self.title}'
 
-
-# class ColorPicker(db.Model, UserMixin):
-#     __tablename__ = 'colorpicker'
-#     id = db.Column(db.Integer(), primary_key=True)
-#     color_name = db.Column(db.String(), nullable=False)
-#     color_code = db.Column(db.String(), nullable=False)
-
-#     def __repr__(self):
-#         return f'{self.color_name}'
+# db.create_all()
