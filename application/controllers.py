@@ -1,6 +1,3 @@
-import email
-from os import stat
-from turtle import title
 from application import app,db,bcrypt
 from flask import render_template, url_for
 from flask import request,flash, redirect
@@ -8,13 +5,15 @@ from application.forms import RegistrationForm,LoginForm,CreateList,CreateCard,M
 from application.models import User,List,Card
 from flask_login import login_user,logout_user,login_required,current_user
 from datetime import datetime
-import matplotlib
+import matplotlib,os
 matplotlib.use('Agg')
 from matplotlib import pyplot as plt
 from matplotlib import dates as dt
 # @app.before_first_request
 # def init_app():
 #     logout_user()
+
+basedir = os.path.abspath(os.path.dirname(__file__))
 
 @app.route("/")
 @login_required 
@@ -31,23 +30,29 @@ def plot_graph(dates,count):
     plt.gca().xaxis.set_major_formatter(date_format)
     plt.title('Daily Tasks Completed Count')
     plt.tight_layout()
-    plt.savefig('/Users/viraj/Github/KanbanApp/static/images/summary_plot.png')
+    # os.path.join(basedir,"static/images/summary_completed.png")
+    plt.savefig(os.path.join(basedir,"../static/images/summary_plot.png"))
+    plt.close()
 
 def plot_piechart_completed(slices,labels):
-    colors = ['#6E6B6B','#4C628A'] # use hex values
-    plt.pie(slices,labels=labels,colors=colors,autopct=lambda p: '{:.0f}%'.format(p))  
+    colors = ['#6E6B6B','#4C628A','#684080'] # use hex values
+    plt.pie(slices,labels=labels,colors=colors)  
+    # ,autopct=lambda p: '{:.0f}%'.format(p)
     plt.title('Completed Cards Summary')
     plt.legend(loc='best')
     plt.tight_layout()
-    plt.savefig('/Users/viraj/Github/KanbanApp/static/images/summary_completed.png')
+    plt.savefig(os.path.join(basedir,"../static/images/summary_completed.png"))
+    plt.close()
     
 def plot_piechart_completed_uncompleted(slices,labels):
     colors = ['#6E6B6B','#4C628A','#684080'] # use hex values
-    plt.pie(slices,labels=labels,colors=colors,autopct=lambda p: '{:.0f}%'.format(p))
+    plt.pie(slices,labels=labels,colors=colors)
+    # ,autopct=lambda p: '{:.0f}%'.format(p)
     plt.title('Completed vs Uncompleted Cards Summary')
     plt.legend(loc='best')
     plt.tight_layout()
-    plt.savefig('/Users/viraj/Github/KanbanApp/static/images/summary_completed_uncompleted.png')
+    plt.savefig(os.path.join(basedir,"../static/images/summary_completed_uncompleted.png"))
+    plt.close()
     
 
 
@@ -89,23 +94,30 @@ def summary():
             dates.append(date)
             count.append(1)
     # Plot graph Date completed count - save image
-    
-    plt.figure(0)
-    plt.clf()
-    plot_graph(dates,count)
+    cards = [card for card in list.cards for list in current_user.lists]
+    if cards:
+        plt.figure(0)
+        plt.clf()
+        plot_graph(dates,count)
 
-    plt.figure(1)
-    plt.clf()
-    # Pie chart for completed/uncompleted count - save image
-    slices1 = [completed_count,uncompleted_deadline_cross_count,uncompleted_deadline_not_cross_count]
-    lables1 = ['Completed Tasks','Uncompleted Tasks that crossed deadline','Uncompleted Tasks with deadline pending']
-    plot_piechart_completed_uncompleted(slices1,lables1)
-    plt.figure(2)
-    plt.clf()
-    # Pie chart for completed count - save image
-    slices2 = [completed_before_deadline_count,completed_after_deadline_count]
-    lables2 = ['Cards completed before deadline','Cards completed after deadline']
-    plot_piechart_completed(slices2,lables2)
+        plt.figure(1)
+        plt.clf()
+        # Pie chart for completed/uncompleted count - save image
+        slices1 = [completed_count,uncompleted_deadline_cross_count,uncompleted_deadline_not_cross_count]
+        print(slices1)
+        lables1 = ['Completed cards','Uncompleted cards that crossed deadline','Uncompleted cards with deadline pending']
+        plot_piechart_completed_uncompleted(slices1,lables1)
+        plt.figure(2)
+        plt.clf()
+        # Pie chart for completed count - save image
+        slices2 = [completed_before_deadline_count,completed_after_deadline_count,uncompleted_count]
+        print(slices2)
+        lables2 = ['Cards completed before deadline','Cards completed after deadline','Uncompleted cards']
+        plot_piechart_completed(slices2,lables2)
+    else:
+        flash(f"You don't have any cards to show summary",'warning')
+        return redirect(url_for('board'))
+
     return render_template("summary.html",user=current_user)
 
 @app.route("/register", methods=["GET","POST"])

@@ -1,7 +1,4 @@
-from enum import unique
-from tkinter import CASCADE
 from flask_login import UserMixin
-from sqlalchemy import ForeignKey
 from application import login_manager
 from datetime import datetime
 from application.database import db
