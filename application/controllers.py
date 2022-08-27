@@ -108,9 +108,6 @@ def summary():
     plot_piechart_completed(slices2,lables2)
     return render_template("summary.html",user=current_user)
 
-
-
-
 @app.route("/register", methods=["GET","POST"])
 def register():
     form = RegistrationForm()

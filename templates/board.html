@@ -44,13 +44,13 @@
                             <!-- render list name -->
                             {{ list.name }}
                         </a>
-                        <ul class="dropdown-menu w-100" aria-labelledby="dropdownMenuLink">
+                        <ul class="dropdown-menu w-100 border" aria-labelledby="dropdownMenuLink">
                             <li><a class="dropdown-item w-100 border-bottom" href="edit_list/{{ list.id }}"
                                     style="text-align:center ;">Edit
                                     list</a></li>
                             <li><a onclick="return confirm('Are you sure you want to Delete?');"
-                                    class="dropdown-item w-100 " href="delete_list/{{ list.id }}"
-                                    style="text-align:center ;">Delete list</a>
+                                    class="dropdown-item w-100 border-bottom" href="delete_list/{{ list.id }}"
+                                    style="text-align:center ;">Delete list with all cards</a>
                             </li>
                             <li><a class="dropdown-item w-100 " href="delete_list_move_cards/{{ list.id }}"
                                     style="text-align:center ;">Move Cards and Delete list</a>
