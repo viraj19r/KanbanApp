@@ -1,4 +1,4 @@
-from application.__init__ import app
+from application import app
 from flask_restful import Resource,Api
 
 api = Api(app)

@@ -41,7 +41,7 @@ def plot_graph(dates,count):
 
 def plot_piechart_completed(slices,labels):
     colors = ['#6E6B6B','#4C628A','#684080'] # use hex values
-    plt.pie(slices,labels=labels,colors=colors,autopct=lambda p: '{:.0f}%'.format(p))  
+    plt.pie(slices,labels=labels,colors=colors,autopct=lambda p: '{:.0f}%'.format(p),labeldistance=None)  
     # 
     plt.title('Completed Cards Summary')
     plt.legend(loc='best')
@@ -51,15 +51,12 @@ def plot_piechart_completed(slices,labels):
     
 def plot_piechart_completed_uncompleted(slices,labels):
     colors = ['#6E6B6B','#4C628A','#684080'] # use hex values
-    plt.pie(slices,labels=labels,colors=colors,autopct=lambda p: '{:.0f}%'.format(p))
+    plt.pie(slices,labels=labels,colors=colors,autopct=lambda p: '{:.0f}%'.format(p),labeldistance=None)
     # ,autopct=lambda p: '{:.0f}%'.format(p)
     plt.title('Completed vs Uncompleted Cards Summary')
     plt.legend(loc='best')
     plt.tight_layout()
     plt.savefig(os.path.join(basedir,"../static/images/summary_completed_uncompleted.png"))
-
-    
-
 
 @app.route("/summary")
 @login_required 
@@ -102,10 +99,11 @@ def summary():
     # Plot graph Date completed count - save image
     cards = [card for card in list.cards for list in current_user.lists]
     if cards:
-        plt.figure(0)
-        plt.clf()
-        plot_graph(dates,count)
-        plt.figure(1)
+        if dates :
+            plt.figure(0)
+            plt.clf()
+            plot_graph(dates,count)
+            plt.figure(1)
         plt.clf()
         # Pie chart for completed/uncompleted count - save image
         slices1 = [completed_count,uncompleted_deadline_cross_count,uncompleted_deadline_not_cross_count]
@@ -121,7 +119,7 @@ def summary():
         flash(f"You don't have any cards to show summary",'warning')
         return redirect(url_for('board'))
 
-    return render_template("summary.html",user=current_user)
+    return render_template("summary.html",user=current_user, dates=dates)
 
 @app.route("/register", methods=["GET","POST"])
 def register():
@@ -163,9 +161,8 @@ def add_list():
     if len(all_lists) < 5 :
         if form.validate_on_submit():
             list = List(name=form.list_name.data,description=form.description.data,user_id=current_user.id)
-
-            checkdblist = List.query.filter_by(name=form.list_name.data).first()
-            if not  checkdblist:
+            current_user_list = [list.name for list in current_user.lists]
+            if form.list_name.data not in current_user_list:
                 db.session.add(list)
                 db.session.commit()
                 flash(f'List {form.list_name.data} has been created successfully','success')
@@ -193,11 +190,15 @@ def add_card():
             status = True
             date_completed = datetime.now()
         card = Card(title=form.title.data,content=form.content.data,deadline=form.deadline.data,date_completed=date_completed,completed_status=status,list_id=form.choose_list.data)
-        checkdbcard = Card.query.filter_by(title=form.title.data).first()
-        if not checkdbcard:
+        # checkdbcard = Card.query.filter_by(title=form.title.data).first()
+        current_user_card_list = []
+        for list in current_user.lists:
+            for c in list.cards:
+                current_user_card_list.append(c.title)
+        if form.title.data not in current_user_card_list:
             db.session.add(card)
             db.session.commit()
-            flash(f'Card {form.title.data} has been created successfully','success')
+            flash(f'Card "{form.title.data}" has been created successfully','success')
             return redirect(url_for('board'))
         else:
             flash(f'Card named "{form.title.data}" already exist, Please try again with different name','success')
@@ -212,8 +213,8 @@ def edit_list(list_id):
         form.list_name.data = list.name
         form.description.data = list.description
     if form.validate_on_submit():
-        checkdblist = List.query.filter_by(name=form.list_name.data).first()
-        if not  checkdblist:
+        current_user_list = [li.name for li in current_user.lists if li.name != list.name]
+        if form.list_name.data not in current_user_list:
             list.name = form.list_name.data
             list.description = form.description.data
             db.session.commit()
@@ -241,9 +242,12 @@ def edit_card(card_id):
         if complete_status == 'Completed':
             status = True
         #check if that cardname exist in that particular list 
-        checkdbcard = Card.query.filter_by(title=form.title.data)
-        checkdbcard = [c for c in checkdbcard if c!=card]
-        if not checkdbcard:
+        current_user_card_list = []
+        for list in current_user.lists:
+            for c in list.cards:
+                if c!=card:
+                    current_user_card_list.append(c.title)
+        if card.title not in current_user_card_list:
             card.title = form.title.data
             card.content = form.content.data
             card.deadline = form.deadline.data

@@ -25,7 +25,7 @@ class User(db.Model, UserMixin):
 class List(db.Model, UserMixin):
     __tablename__ = 'list'
     id = db.Column(db.Integer(), primary_key=True)
-    name = db.Column(db.String(), unique=True, nullable=False)
+    name = db.Column(db.String(),nullable=False)
     description = db.Column(db.String())
     date_created = db.Column(db.DateTime(), nullable=False,default=datetime.now())
     # foreign key
@@ -40,7 +40,7 @@ class List(db.Model, UserMixin):
 class Card(db.Model, UserMixin):
     __tablename__ = 'card'
     id = db.Column(db.Integer(), primary_key=True)
-    title = db.Column(db.String(), unique=True, nullable=False)
+    title = db.Column(db.String(),nullable=False)
     content = db.Column(db.String())
     deadline = db.Column(db.DateTime(), nullable=False)
     date_created = db.Column(db.DateTime(), nullable=False,default=datetime.now())
@@ -53,4 +53,4 @@ class Card(db.Model, UserMixin):
     def __repr__(self):
         return f'Card-{self.title}'
 
-# db.create_all()
+db.create_all()
