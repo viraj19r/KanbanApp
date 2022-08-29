@@ -9,55 +9,77 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous" />
-
-
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
+        integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous" />
+    <style>
+        html {
+            position: relative;
+            min-height: 100%;
+          }
+          body {
+            margin-bottom: 80px;
+            
+          }
+          .footer {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 70px;
+          }
+    </style>
     <title>Kanban</title>
+    <link rel="icon" type="image/x-icon" href="../static/images/fav1.png">
 </head>
 
-<body class="d-flex flex-column min-vh-100 my-2" style="background-color:#e8e8e8; padding-bottom:120px;"></body>
-<header>
-    <nav class="navbar navbar-expand-lg bg-black">
-        <div class="container-fluid">
-            <a class="navbar-brand border-" href="{{ url_for('board') }}">
-                <img src="{{url_for('static',filename='images/Kanban.png')}}" alt="" width="120" height="80"
-                    class="d-inline-block align-text-top my-0 rounded border-white">
-            </a>
-            <div class="">
-                {% block header %}
-                {% if current_user.is_authenticated %}
-                <a href="{{ url_for('logout') }}" class="btn btn-outline-danger btn-light mx-5" type="submit">Log
-                    Out</a>
-                {% endif %}
-                {% endblock header %}
+<body class="d-flex flex-column" id="wrap" style="background-color:#e8e8e8;">
+
+    <header>
+        <nav class="navbar navbar-expand-lg bg-black">
+            <div class="container-fluid">
+                <a class="navbar-brand border-" href="{{ url_for('board') }}">
+                    <img src="{{url_for('static',filename='images/Kanban.png')}}" alt="" width="120" height="80"
+                        class="d-inline-block align-text-top my-0 rounded border-white">
+                </a>
+                <div class="">
+                    {% block header %}
+                    {% if current_user.is_authenticated %}
+                    <a href="{{ url_for('logout') }}" class="btn btn-outline-danger btn-light mx-5" type="submit">Log
+                        Out</a>
+                    {% endif %}
+                    {% endblock header %}
+                </div>
             </div>
-        </div>
-        </div>
-    </nav>
-</header>
-{% with messages = get_flashed_messages(with_categories=true) %}
-{% if messages %}
-{% for category,message in messages %}
-<div class="alert alert-{{ category }}"> {{ message }}</div>
-{% endfor %}
-{% endif %}
-{% endwith %}
+        </nav>
+    </header>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category,message in messages %}
+    <div class="alert alert-{{ category }}"> {{ message }}</div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
 
 
-{% block body %} {% endblock body %}
+    {% block body %} {% endblock body %}
 
-    <footer class="fixed-bottom bg-black text-center text-white py-5 mt-4">
-    <section class="row align-items-start">
+    <footer class="footer bg-black text-center text-white py-4 mt-4">
+        <section class="row align-items-start">
 
-        <a href="" class="text-white text-decoration-none col">Contact me</a>
+            <a href="" class="text-white text-decoration-none col">Contact me</a>
 
-        <a href="" class="text-white text-decoration-none col ">Help me Improve</a>
+            <a href="" class="text-white text-decoration-none col ">Help me Improve</a>
 
-        <a href="https://www.linkedin.com/in/virajsharma/" class="text-white text-decoration-none col">Connect with me on LinkedIn</a>
+            <a href="https://www.linkedin.com/in/virajsharma/" class="text-white text-decoration-none col">Connect
+                with
+                me
+                on LinkedIn</a>
 
-    </section>
-</footer>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
+        </section>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa"
+        crossorigin="anonymous"></script>
+
 </body>
 
 </html>

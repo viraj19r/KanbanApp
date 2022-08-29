@@ -53,4 +53,4 @@ class Card(db.Model, UserMixin):
     def __repr__(self):
         return f'Card-{self.title}'
 
-db.create_all()
+# db.create_all()

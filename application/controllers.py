@@ -97,7 +97,10 @@ def summary():
             dates.append(date)
             count.append(1)
     # Plot graph Date completed count - save image
-    cards = [card for card in list.cards for list in current_user.lists]
+    cards = []
+    for list in current_user.lists:
+        for card in list.cards:
+            cards.append(card)
     if cards:
         if dates :
             plt.figure(0)
@@ -157,7 +160,7 @@ def logout():
 @login_required 
 def add_list():
     form = CreateList()
-    all_lists = List.query.all()
+    all_lists = current_user.lists
     if len(all_lists) < 5 :
         if form.validate_on_submit():
             list = List(name=form.list_name.data,description=form.description.data,user_id=current_user.id)
@@ -247,7 +250,10 @@ def edit_card(card_id):
             for c in list.cards:
                 if c!=card:
                     current_user_card_list.append(c.title)
-        if card.title not in current_user_card_list:
+        print(current_user_card_list)
+        if form.title.data in current_user_card_list:
+            flash(f'Card named "{form.title.data}" already exist, Please try again with different name','success')
+        else:
             card.title = form.title.data
             card.content = form.content.data
             card.deadline = form.deadline.data
@@ -256,8 +262,6 @@ def edit_card(card_id):
             db.session.commit()
             flash(f'Card updated successfully','success')
             return redirect(url_for('board'))
-        else:
-            flash(f'Card named "{form.title.data}" already exist, Please try again with different name','success')
     return render_template("edit_card.html",form=form)
 
 @app.route("/delete_list/<int:list_id>", methods=["GET","POST"])
