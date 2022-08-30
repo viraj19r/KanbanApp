@@ -7,27 +7,76 @@
 
 {% block body %}
 <!-- For user with no lists -->
-{% if user.lists %}
+{% if not user.lists %}
+
+<div class="mb-2 mx-5 mt-3">
+    <div class="d-flex justify-content-center align-items-center">
+        <h1 class="h2 d-flex align-items-center mt-3" style="font-family: monospace, serif;">Create Kanban Lists here :
+        </h1>
+        <a href="{{ url_for('add_list') }}" id="hover_effect"
+            class="btn btn-dark border rounded-pill p-3 mx-5 shadow-lg">Add
+            List <span>&#43;</span></a>
+    </div>
+</div>
+
+<div class="container">
+    <div class="d-flex justify-content-cente m-3">
+        <h3>Kanban board components </h3>
+    </div>
+
+    <div>
+        <div class="card p-3 m-2" style="min-height: 20px;">
+            <span style="font-weight: bold;">Kanban Lists </span>Each column on the board represents a different stage
+            of your workflow. The cards go
+            through
+            the workflow until their full completion.
+        </div>
+
+        <div class="card p-3 m-2" style="min-height: 20px;">
+
+            <span style="font-weight: bold;">Kanban Cards </span>This is the visual representation of tasks. Each card
+            contains information about the task and
+            its
+            status, such as deadline, description, etc.
+
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-cente m-3">
+        <h3>Use this kanban to : </h3>
+
+    </div>
+    <div class="card p-3 m-2" style="min-height: 20px;">
+
+        <ul>
+            <li>Visualize Your Workflow on the Kanban Board
+            </li>
+            <li>Use the Kanban Board to Limit Work in Progress and Focus
+            </li>
+            <li>Collect Key Workflow Metrics and Improve from Summary
+            </li>
+        </ul>
+    </div>
+
+
+
+</div>
+
+
+<!-- For user with min of 1 list in database -->
+{%else%}
+
+
 <div class="mb-2 mx-5 mt-3">
     <div class="d-flex justify-content-between">
 
         <h1 class="h2 d-flex align-items-center mx-5" style="font-family: monospace, serif;">Your Board:</h1>
-        <a href="{{ url_for('add_list') }}" class="btn btn-dark border rounded-pill p-4 mx-5 shadow-lg">Add
-            List <span>&#43;</span></a>
-    </div>
-</div>
-<!-- For user with min of 1 list in database -->
-{%else%}
-<div class="mb-2 mx-5 mt-3">
-    <div class="d-flex justify-content-center">
-
-        <h1 class="h2 d-flex align-items-center" style="font-family: monospace, serif;">Create Kanban Lists here : </h1>
-        <a href="{{ url_for('add_list') }}" class="btn btn-dark border rounded-pill p-4 mx-5 shadow-lg">Add
+        <a href="{{ url_for('add_list') }}" id="hover_effect"
+            class="btn btn-dark border rounded-pill p-3 mx-5 shadow-lg">Add
             List <span>&#43;</span></a>
     </div>
 </div>
 
-{% endif %}
 
 <div class="container-fluid">
     <div class="d-flex flex-row justify-content-around">
@@ -46,14 +95,13 @@
                         </a>
                         <ul class="dropdown-menu w-100 border" aria-labelledby="dropdownMenuLink">
                             <li><a class="dropdown-item w-100 border-bottom" href="edit_list/{{ list.id }}"
-                                    style="text-align:center ;">Edit
-                                    list</a></li>
+                                    style="text-align:center ;">Edit</a></li>
                             <li><a onclick="return confirm('Are you sure you want to Delete?');"
                                     class="dropdown-item w-100 border-bottom" href="delete_list/{{ list.id }}"
-                                    style="text-align:center ;">Delete list with all cards</a>
+                                    style="text-align:center ;">Delete</a>
                             </li>
                             <li><a class="dropdown-item w-100 " href="delete_list_move_cards/{{ list.id }}"
-                                    style="text-align:center ;">Move Cards and Delete list</a>
+                                    style="text-align:center ;">Move Cards and Delete</a>
                             </li>
                         </ul>
                         <div class="d-flex flex-column">
@@ -77,12 +125,11 @@
                                             {% endif %}
                                             <ul class="dropdown-menu w-100" aria-labelledby="dropdownMenuLink">
                                                 <li><a class="dropdown-item w-100 border-bottom"
-                                                        href="/edit_card/{{ card.id }}" style="text-align:center ;">Edit
-                                                        Card</a></li>
+                                                        href="/edit_card/{{ card.id }}" style="text-align:center ;">Edit</a></li>
                                                 <li><a onclick="return confirm('Are you sure you want to Delete?');"
                                                         class="dropdown-item w-100 border-bottom"
                                                         href="delete_card/{{ card.id }}"
-                                                        style="text-align:center ;">Delete Card</a></li>
+                                                        style="text-align:center ;">Delete</a></li>
                                                 {% if card.completed_status == False %}
                                                 <li><a onclick="return confirm('Are you sure you want to Mark it as Complete?');"
                                                         class="dropdown-item w-100 "
@@ -125,8 +172,8 @@
                             {% endfor %}
                             <!-- add card button  -->
                             <div class="d-flex justify-content-center">
-                                <a href="{{url_for('add_card')}}"
-                                    class="btn btn-light border rounded-pill px-4 py-3"><span>&#43;</span></a>
+                                <a href="{{url_for('add_card')}}" class="btn btn-light border rounded-pill px-4 py-3"
+                                    id="hover_effect_2"><span>&#43;</span></a>
                             </div>
                         </div>
                     </div>
@@ -137,5 +184,5 @@
         {% endfor %}
     </div>
 </div>
-
+{% endif %}
 {% endblock body %}

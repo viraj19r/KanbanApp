@@ -41,20 +41,20 @@ def plot_graph(dates,count):
 
 def plot_piechart_completed(slices,labels):
     colors = ['#6E6B6B','#4C628A','#684080'] # use hex values
-    plt.pie(slices,labels=labels,colors=colors,autopct=lambda p: '{:.0f}%'.format(p),labeldistance=None)  
+    plt.pie(slices,labels=labels,colors=colors,radius=0.8,autopct=lambda p: '{:.0f}%'.format(p),labeldistance=None)  
     # 
     plt.title('Completed Cards Summary')
-    plt.legend(loc='best')
+    plt.legend(loc=2)
     plt.tight_layout()
     plt.savefig(os.path.join(basedir,"../static/images/summary_completed.png"))
 
     
 def plot_piechart_completed_uncompleted(slices,labels):
     colors = ['#6E6B6B','#4C628A','#684080'] # use hex values
-    plt.pie(slices,labels=labels,colors=colors,autopct=lambda p: '{:.0f}%'.format(p),labeldistance=None)
+    plt.pie(slices,labels=labels,colors=colors,radius=0.8,autopct=lambda p: '{:.0f}%'.format(p),labeldistance=None)
     # ,autopct=lambda p: '{:.0f}%'.format(p)
     plt.title('Completed vs Uncompleted Cards Summary')
-    plt.legend(loc='best')
+    plt.legend(loc=2)
     plt.tight_layout()
     plt.savefig(os.path.join(basedir,"../static/images/summary_completed_uncompleted.png"))
 
@@ -198,13 +198,13 @@ def add_card():
         for list in current_user.lists:
             for c in list.cards:
                 current_user_card_list.append(c.title)
-        if form.title.data not in current_user_card_list:
+        if form.title.data in current_user_card_list:
+            flash(f'Card named "{form.title.data}" already exist, Please try again with different name','success')
+        else:
             db.session.add(card)
             db.session.commit()
             flash(f'Card "{form.title.data}" has been created successfully','success')
             return redirect(url_for('board'))
-        else:
-            flash(f'Card named "{form.title.data}" already exist, Please try again with different name','success')
     return render_template("add_card.html",form=form)
 
 @app.route("/edit_list/<int:list_id>", methods=["GET","POST"])
