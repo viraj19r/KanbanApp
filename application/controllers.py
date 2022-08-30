@@ -9,53 +9,51 @@ import matplotlib,os
 matplotlib.use('Agg')
 from matplotlib import pyplot as plt
 from matplotlib import dates as dt
-# @app.before_first_request
-# def init_app():
-#     logout_user()
 
-basedir = os.path.abspath(os.path.dirname(__file__))
-@app.route("/")
+
+basedir = os.path.abspath(os.path.dirname(__file__)) # get absolute path for application directory
+
+# render welcome page on root(/) url
+@app.route("/") 
 def welcome():
     return render_template("welcome.html")
 
+#kanban board - main page
 @app.route("/board")
 @login_required 
 def board():
-    lists = List.query.all()
-    datenow = datetime.now().date()
+    datenow = datetime.now().date() # get current date so that we can modify the color of deadline to red for user
     return render_template("board.html",user=current_user,datenow=datenow)
 
+# function to plot line graph for completed tasks
 def plot_graph(dates,count):
     plt.style.use('seaborn')
     dates = [datetime(date.year,date.month,date.day) for date in dates]
-    print(dates,count)
     plt.plot_date(dates,count,linestyle='solid')
-    days = timedelta(days = 2)
-    mindate = dates[0] - days
-    maxdate = dates[-1] +  days
-    plt.ylim(0,max(count)+1)
-    plt.xlim(mindate, maxdate)
-    plt.gcf().autofmt_xdate()
-    date_format = dt.DateFormatter('%b, %d %Y')
+    days = timedelta(days = 2) # create a timedelta(range) of 2 days
+    mindate = dates[0] - days # get date of 2 days before
+    maxdate = dates[-1] +  days # get date of 2 days after
+    plt.ylim(0,max(count)+1) # set limit for x-axis
+    plt.xlim(mindate, maxdate) # set limit for y-axis
+    plt.gcf().autofmt_xdate() # auto format date
+    date_format = dt.DateFormatter('%b, %d %Y') # format date manually
     plt.gca().xaxis.set_major_formatter(date_format)
-    plt.title('Daily Tasks Completed Count')
+    plt.title('Daily Tasks Completed Count') 
     plt.tight_layout()
     plt.savefig(os.path.join(basedir,"../static/images/summary_plot.png"))
 
 def plot_piechart_completed(slices,labels):
-    colors = ['#6E6B6B','#4C628A','#684080'] # use hex values
-    plt.pie(slices,labels=labels,colors=colors,radius=0.8,autopct=lambda p: '{:.0f}%'.format(p),labeldistance=None)  
-    # 
+    colors = ['#6E6B6B','#4C628A','#684080'] # use hex values for color
+    plt.pie(slices,labels=labels,colors=colors,radius=0.8,autopct=lambda p: '{:.0f}%'.format(p),labeldistance=None)   #autopct will show the percentage on pie chart
+    # labeldistance None will not show the labels around the pie chart
     plt.title('Completed Cards Summary')
-    plt.legend(loc=2)
+    plt.legend(loc=2) # loc=2 mean upper left position
     plt.tight_layout()
     plt.savefig(os.path.join(basedir,"../static/images/summary_completed.png"))
 
-    
 def plot_piechart_completed_uncompleted(slices,labels):
-    colors = ['#6E6B6B','#4C628A','#684080'] # use hex values
+    colors = ['#6E6B6B','#4C628A','#684080'] 
     plt.pie(slices,labels=labels,colors=colors,radius=0.8,autopct=lambda p: '{:.0f}%'.format(p),labeldistance=None)
-    # ,autopct=lambda p: '{:.0f}%'.format(p)
     plt.title('Completed vs Uncompleted Cards Summary')
     plt.legend(loc=2)
     plt.tight_layout()
@@ -91,7 +89,7 @@ def summary():
     uncompleted_deadline_not_cross_count = uncompleted_count - uncompleted_deadline_cross_count
     dates = []
     count = []
-    for date in date_completed:
+    for date in date_completed: # collect date and corresponding dates count to plot line graph
         if date in dates:
             i = dates.index(date)
             count[i] += 1
@@ -99,13 +97,14 @@ def summary():
             time = datetime.min.time()
             dates.append(date)
             count.append(1)
+    
     # Plot graph Date completed count - save image
-    cards = []
-    for list in current_user.lists:
+    cards = [] 
+    for list in current_user.lists: # collect all the cards present for this particular use in database
         for card in list.cards:
             cards.append(card)
-    if cards:
-        if dates :
+    if cards: # if there is atleast one card then only summary page will be shown else flash a msg
+        if dates : # if atleast one card has completed - then it will have dates completed - then only show summary else do nothing
             plt.figure(0)
             plt.clf()
             plot_graph(dates,count)
@@ -152,23 +151,23 @@ def login():
             flash('Login unsuccessful! Please check your credentials again','danger')
     return render_template("signin.html", form=form)
 
-@app.route("/logout", methods=["GET","POST"])
+@app.route("/logout")
 @login_required 
 def logout():
-    logout_user()
+    logout_user() # logout function provided by flask-login
     flash('Logout successfully, Try logging in again','success')
     return redirect(url_for('login'))
 
 @app.route("/add_list", methods=["GET","POST"])
 @login_required 
 def add_list():
-    form = CreateList()
-    all_lists = current_user.lists
-    if len(all_lists) < 5 :
-        if form.validate_on_submit():
+    form = CreateList() # create object of form createlist
+    all_lists = current_user.lists 
+    if len(all_lists) < 5 : # restrict user to create list not more than 5
+        if form.validate_on_submit(): # backend validation of form
             list = List(name=form.list_name.data,description=form.description.data,user_id=current_user.id)
             current_user_list = [list.name for list in current_user.lists]
-            if form.list_name.data not in current_user_list:
+            if form.list_name.data not in current_user_list: # if list is not present then store it in db
                 db.session.add(list)
                 db.session.commit()
                 flash(f'List {form.list_name.data} has been created successfully','success')
@@ -201,7 +200,7 @@ def add_card():
         for list in current_user.lists:
             for c in list.cards:
                 current_user_card_list.append(c.title)
-        if form.title.data in current_user_card_list:
+        if form.title.data in current_user_card_list: # if card already exist for the user then flash else update db
             flash(f'Card named "{form.title.data}" already exist, Please try again with different name','success')
         else:
             db.session.add(card)
@@ -215,10 +214,10 @@ def add_card():
 def edit_list(list_id):
     form = CreateList()
     list = List.query.filter_by(id=list_id).first()
-    if request.method == 'GET':
+    if request.method == 'GET': # pre-populate the form
         form.list_name.data = list.name
         form.description.data = list.description
-    if form.validate_on_submit():
+    if form.validate_on_submit(): # form backend validation
         current_user_list = [li.name for li in current_user.lists if li.name != list.name]
         if form.list_name.data not in current_user_list:
             list.name = form.list_name.data
@@ -238,7 +237,7 @@ def edit_card(card_id):
     lists = List.query.filter_by(user_id=current_user.id).all()
     form.choose_list.choices = [(list.id,list.name) for list in lists]
     card = Card.query.filter_by(id=card_id).first()
-    if request.method == "GET":
+    if request.method == "GET": # pre-populate the form
         form.title.data = card.title
         form.content.data = card.content
         form.deadline.data = card.deadline
@@ -267,7 +266,7 @@ def edit_card(card_id):
             return redirect(url_for('board'))
     return render_template("edit_card.html",form=form)
 
-@app.route("/delete_list/<int:list_id>", methods=["GET","POST"])
+@app.route("/delete_list/<int:list_id>")
 @login_required 
 def delete_list(list_id):
     list = List.query.filter_by(id=list_id).first()
@@ -305,7 +304,7 @@ def delete_list_move_cards(list_id):
 
     return render_template('move_cards.html',form=form,user=current_user)
 
-@app.route("/delete_card/<int:card_id>", methods=["GET","POST"])
+@app.route("/delete_card/<int:card_id>")
 @login_required
 def delete_card(card_id):
     card = Card.query.filter_by(id=card_id).first()
@@ -317,7 +316,7 @@ def delete_card(card_id):
 
 
 
-@app.route("/mark_card_completed/<int:card_id>", methods=["GET","POST"])
+@app.route("/mark_card_completed/<int:card_id>")
 @login_required
 def mark_card_completed(card_id):
     card = Card.query.filter_by(id=card_id).first()
