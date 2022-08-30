@@ -1,8 +1,7 @@
 {% extends "base.html" %}
 {% block header %}
-<a href="{{ url_for('register') }}" class="btn btn-outline-success btn-light mx-5" type="submit">New to this
-    app? &nbsp Create Account
-    here</a>{% endblock header %}
+<a href="{{ url_for('register') }}" class="btn btn-outline-success btn-light mx-5" type="submit">Create New
+    Account</a>{% endblock header %}
 
 {% block body %}
 
@@ -15,53 +14,54 @@
     </div>
     <div class="d-flex justify-content-center">
         <div class="d-flex justify-content-center bg-dark py-5 px-1 w-50 shadow-lg " style="border-radius: 50px;">
-                <form method="POST" action="" style="height: 30%; width:50%;">
-                    {{ form.hidden_tag() }}
-                    <div class="d-flex justify-content-center">
-                        <h2 style="color: white;"></h2>
+            <form method="POST" action="" style="height: 30%; width:50%;">
+                {{ form.hidden_tag() }}
+                <div class="d-flex justify-content-center">
+                    <h2 style="color: white;"></h2>
+                </div>
+                <div class="form-group mb-3">
+                    {{ form.email.label(style="color: white;",class="form-control-label") }}
+                    {% if form.email.errors %}
+                    {{ form.email(class="form-control is-invalid",placeholder="Enter your Email") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.email.errors %}
+                        <span>{{ error }}</span>
+                        {% endfor %}
                     </div>
-                    <div class="form-group mb-3">
-                        {{ form.email.label(style="color: white;",class="form-control-label") }}
-                        {% if form.email.errors %}
-                        {{ form.email(class="form-control is-invalid",placeholder="Enter your Email") }}
-                        <div class="invalid-feedback">
-                            {% for error in form.email.errors %}
-                            <span>{{ error }}</span>
-                            {% endfor %}
-                        </div>
-                        {% else %}
-                        {{ form.email(class="form-control",placeholder="Enter your Email") }}
-                        {% endif %}
-                        <small id="emailHelp" class="form-text my-3" style="color: white; font-size:x-small;">We'll never share your email with anyone
-                            else.</small>
-                    </div>
-                    <div class="form-group mb-5">
-                        <!-- <label for="pass" style="color: white;">Password</label>
+                    {% else %}
+                    {{ form.email(class="form-control",placeholder="Enter your Email") }}
+                    {% endif %}
+                    <small id="emailHelp" class="form-text my-3" style="color: white; font-size:x-small;">We'll never
+                        share your email with anyone
+                        else.</small>
+                </div>
+                <div class="form-group mb-5">
+                    <!-- <label for="pass" style="color: white;">Password</label>
                         <input type="password" class="form-control" id="pass" placeholder="Password"> -->
-                        {{ form.password.label(style="color: white;",class="form-control-label") }}
-                        {% if form.password.errors %}
-                        {{ form.password(class="form-control is-invalid",placeholder="Enter Password") }}
-                        <div class="invalid-feedback">
-                            {% for error in form.password.errors %}
-                            <span>{{ error }}</span>
-                            {% endfor %}
-                        </div>
-                        {% else %}
-                        {{ form.password(class="form-control my-2",placeholder="Enter Password") }}
-                        {% endif %}
+                    {{ form.password.label(style="color: white;",class="form-control-label") }}
+                    {% if form.password.errors %}
+                    {{ form.password(class="form-control is-invalid",placeholder="Enter Password") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.password.errors %}
+                        <span>{{ error }}</span>
+                        {% endfor %}
                     </div>
-                    <div class="d-flex justify-content-center mt-5">
-                        <!-- <a class="btn btn-success d-flex justify-content-center" href="#" role="button"
+                    {% else %}
+                    {{ form.password(class="form-control my-2",placeholder="Enter Password") }}
+                    {% endif %}
+                </div>
+                <div class="d-flex justify-content-center mt-5">
+                    <!-- <a class="btn btn-success d-flex justify-content-center" href="#" role="button"
                             style="width: 30%;">Sign In</a> -->
-                        {{ form.submit(class="btn btn-success d-flex justify-content-center") }}
-                    </div>
-                    <div class="d-flex justify-content-center">
-                        <small class="text-muted ml-2 mt-2" >
-                            <a href="#" class="text-decoration-none" style="color: white;">Forgot Password?</a>
-                        </small>
-                    </div>
-                    
-                </form>
+                    {{ form.submit(class="btn btn-success d-flex justify-content-center") }}
+                </div>
+                <div class="d-flex justify-content-center">
+                    <small class="text-muted ml-2 mt-2">
+                        <a href="#" class="text-decoration-none" style="color: white;">Forgot Password?</a>
+                    </small>
+                </div>
+
+            </form>
         </div>
     </div>
 </div>

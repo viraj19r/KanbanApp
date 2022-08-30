@@ -1,0 +1,112 @@
+<!-- <img src="{{url_for('static',filename='images/kanban-system.webp')}}" alt="Kanban System" class=" float-right"
+            width="" height="600rem" style="border-radius: 30px;"> -->
+<!-- <a href="{{ url_for('logout') }}" class="btn btn-outline-danger btn-light mx-5" type="submit">Log -->
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
+        integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous" />
+
+    <title>Kanban</title>
+    <link rel="icon" type="image/x-icon" href="../static/images/fav1.png">
+</head>
+
+<body class="" style="background-color: #e8e8e8;">
+
+    <div class="mb-5 container-fluid shadow d-flex align-items-center flex-column "
+        style="background-image: url('../static/images/Dark.png');height:28rem;">
+        <div class="d-flex mt-5 justify-content-center align-items-center w-100">
+            <h1 style="color: white;">Kanban Board</h1>
+        </div>
+        <div class="mt-5 d-flex flex-column justify-content-center align-items-center w-100">
+            <p class="mt-2" style="color: white;">Visualize Your Workflow on the Kanban Board</p>
+            <p class="mt-2" style="color: white;"> Use the Kanban Board to Limit Work in Progress and Focus</p>
+            <p class="mt-2" style="color: white;">Collect Key Workflow Metrics and Improve from Summary</p>
+        </div>
+        <a href="{{ url_for('register') }}" class="mt-5 btn btn-outline-dark btn-light mx-5 border rounded-pill"
+            type="submit">Get Started</a>
+        <a href="{{ url_for('login') }}" style="color: white; text-decoration:none;" class="mt-3 mx-5"
+            type="submit">Already a user ?</a>
+
+
+
+    </div>
+    <div class="container">
+        <div class="d-flex justify-content-cente m-3">
+            <h3>Kanban board components </h3>
+        </div>
+        <div class="card p-3 m-2" style="min-height: 20px;">
+            A kanban board is one of the tools that can be used to implement kanban to manage work at a personal or
+            organizational level.
+            <br>
+            <br>
+
+            Kanban boards visually depict work at various stages of a process using cards to represent work items and
+            lists(columns) to represent each stage of the process. Cards are moved from left to right to show progress.
+            Kanban can be used to organize many areas of an organization and can be designed accordingly. The simplest
+            kanban board consists of three columns: "to-do", "doing" and "done".
+
+        </div>
+
+
+
+        <div>
+            <div class="card p-3 m-2" style="min-height: 20px;">
+                <span style="font-weight: bold;">Kanban Lists </span> Each column on the board represents a different
+                stage
+                of your workflow. The cards go
+                through
+                the workflow until their full completion.
+            </div>
+
+            <div class="card p-3 m-2" style="min-height: 20px;">
+
+                <span style="font-weight: bold;">Kanban Cards </span>This is the visual representation of tasks. Each
+                card
+                contains information about the task and
+                its
+                status, such as deadline, description, etc.
+
+            </div>
+        </div>
+
+
+
+
+
+    </div>
+
+
+
+
+    <!-- <footer class="footer bg-black text-center text-white py-4 mt-4">
+        <section class="row align-items-start">
+
+            <a href="" class="text-white text-decoration-none col">Contact me</a>
+
+            <a href="" class="text-white text-decoration-none col ">Help me Improve</a>
+
+            <a href="https://www.linkedin.com/in/virajsharma/" class="text-white text-decoration-none col">Connect
+                with
+                me
+                on LinkedIn</a>
+
+        </section>
+    </footer> -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa"
+        crossorigin="anonymous"></script>
+
+</body>
+
+</html>

@@ -14,8 +14,11 @@ from matplotlib import dates as dt
 #     logout_user()
 
 basedir = os.path.abspath(os.path.dirname(__file__))
-
 @app.route("/")
+def welcome():
+    return render_template("welcome.html")
+
+@app.route("/board")
 @login_required 
 def board():
     lists = List.query.all()
